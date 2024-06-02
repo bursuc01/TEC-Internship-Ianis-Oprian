@@ -4,7 +4,7 @@
 1. Install Visual Studio 2022 Community:
 </br> https://visualstudio.microsoft.com/vs/community/
 </br>Make sure that during the installation process, you check ASP .NET and web development and .NET desktop development:
-![Capture456](https://github.com/AgrostemmaGithago/Internship/assets/129935966/b6dd9c96-4b5f-4e1b-93e1-6491639dfd60)
+![Capture456](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/ea4fe745-5fb9-4846-b976-3ece3f117db6)
 (Note: if you already have VS Community installed, make sure you install .NET Core 8 SDK in order for the project to run)
 
 
@@ -18,27 +18,31 @@ https://marketplace.visualstudio.com/items?itemName=ErikEJ.SQLServerCompactSQLit
 
 
 1. Load the database from the repository:
-![Untitled2](https://github.com/AgrostemmaGithago/Internship/assets/129935966/12d97892-8734-4834-a64f-71ace62133bc)
-![Untitled5](https://github.com/AgrostemmaGithago/Internship/assets/129935966/843d414b-318d-4584-b1a7-f933e602b3c0)
-![Untitled6](https://github.com/AgrostemmaGithago/Internship/assets/129935966/4dda280f-bc98-4ded-9ed0-17288b9fa162)
+![Untitled2](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/60ce2d2f-f90b-4b59-978c-72b4267e180a)
+![Untitled5](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/e815f9d1-915b-4a95-8d04-a20e2f254591)
+![Untitled6](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/9bbe9b14-73d7-4391-ba85-25c7d04ea8e1)
+
 
 2. Change to run on multiple startup projects:
- ![Untitled4565](https://github.com/AgrostemmaGithago/Internship/assets/129935966/f9a34901-627d-4a8d-83b5-22b5989f3049)
+![Untitled4565](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/8a766183-0504-4738-ac64-3fceb34f3016)
 
-3. Once you run the applications, you will notice that 2 tabs will open:
-![Untitled90](https://github.com/AgrostemmaGithago/Internship/assets/129935966/1a0b5008-114e-4d4d-aee7-3a97dd2c606f)
+4. Once you run the applications, you will notice that 2 tabs will open:
+![Untitled90](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/1fa4879d-8ded-4a1a-b36b-ffc35dc49669)
+
 One represents the Api app, and the other is the Web App.
 
-5. If you for example, click on the person tab, you will get an exception:
-![Untitled91](https://github.com/AgrostemmaGithago/Internship/assets/129935966/9eeff4f4-639c-4277-bd7d-84da4c037eb4)
+6. If you for example, click on the person tab, you will get an exception:
+![Untitled91](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/233d05f2-54bd-4b68-ae9b-84569a8d66b0)
 In order to fix this, you will have to do a few things:<br>
 5.a. Change the path of the database with your own, in APIDbContext.cs: <br>
-![Capture92](https://github.com/AgrostemmaGithago/Internship/assets/129935966/6dfef969-09b4-42bd-bafd-0a0c58b1ca90)
-5.b. Change the port in the Controller's of the Web App: <br>
-![Capture000](https://github.com/AgrostemmaGithago/Internship/assets/129935966/1c7e5d17-8ed6-4c3b-93cb-cbe4cffc4cb1)
+![Capture92](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/74cbff47-7219-4f5a-a279-fa471c66faab)
 
-6. Now after you saved your changes and run the apps, once you clicked on the Person button in the web app, you should be able to see some people that have been fetched from the database, and their data to be displayed:
-![Capture45](https://github.com/AgrostemmaGithago/Internship/assets/129935966/f07ddc36-71da-45bf-931c-cb6a6f0873da)
+5.b. Change the port in the Controller's of the Web App: <br>
+![Capture000](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/ebdcc827-c7e9-49c1-b560-bfebb633146d)
+
+7. Now after you saved your changes and run the apps, once you clicked on the Person button in the web app, you should be able to see some people that have been fetched from the database, and their data to be displayed:
+![Capture45](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/92f7ea2a-9abe-46ac-a4a2-918fcffbc7ba)
+
 <br>
 Neat! <br>
 
@@ -53,7 +57,8 @@ and finally, let's do some fixes!
 
 # Tasks:
 Database diagram: <br>
-![Capture5465465](https://github.com/AgrostemmaGithago/Internship/assets/129935966/c3931cd7-682f-40e7-b16b-f74b58714029)
+![Capture5465465](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/a95a3f3f-9ee6-42c6-bf8c-cf67ffb5741b)
+
 
 
 1. As a User I want to be able to delete a Person
