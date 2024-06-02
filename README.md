@@ -74,7 +74,7 @@ Database diagram: <br>
 	read: https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-your-first-migration <br>
 	Troubleshoot: <br>
 	ERROR: "dotnet : Could not execute because the specified command or file was not found." Please run "dotnet tool install --global dotnet-ef --version 8.*" <br>
-	ERROR: "No project was found. Change the current working directory or use the --project option". Please change the path to the ApiApp -  run "cd .\Internship\ApiApp" <br>
+	ERROR: "No project was found. Change the current working directory or use the --project option". Please change the path to the ApiApp -  run "cd .\[_]\ApiApp" <br>
 	- modify the View so I could update/add a Person's Details from the web app (Birthday and PersonCity)
 
 6. As a User I want to be able to delete a Department <br>
