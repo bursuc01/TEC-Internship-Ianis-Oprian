@@ -78,10 +78,10 @@ Database diagram: <br>
 	- modify the View so I could update/add a Person's Details from the web app (Birthday and PersonCity)
 
 6. As a User I want to be able to delete a Department <br>
-7. As a developer I want to not change the URL's of the api in all of the Controllers <br>
+7. As a developer I want to not change the port of the api in all of the Web Controllers <br>
    Details:  Ctrl + Shit + F in the entire solution and search for "HINT"
 <br><br>
-Are you bored yet? get alot of points by: <br>
+Are you bored yet? get a lot of points by: <br>
 8. Adding Authentication to the app, you can implement as you please, but to give you some ideas: <br>
     	- create a Login View with admin username and password. could be a popup or login in the Header of the app. <br>
     	- create an Admin Table with user information <br>
