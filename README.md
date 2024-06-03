@@ -83,7 +83,7 @@ Database diagram: <br>
 <br><br>
 Are you bored yet? get a lot of points by: <br>
 8. Adding Authentication to the app, you can implement as you please, but to give you some ideas: <br>
-    	- create a Login View with admin username and password. could be a popup or login in the Header of the app. <br>
+    	- create a Login View with admin username and password input fields. could be a popup or create the login in the Header of the app. <br>
     	- create an Admin Table with user information <br>
     	- I should not be able to do any of the RESTful api calls on person, persondetails, salary or department tables unless I am logged in <br>
 
