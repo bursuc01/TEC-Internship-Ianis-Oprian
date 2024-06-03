@@ -12,7 +12,7 @@
 https://marketplace.visualstudio.com/items?itemName=ErikEJ.SQLServerCompactSQLiteToolbox <br>
 (make sure the visual studio is not running before installation)
 
-4. Create your own github repository, download the source code and open the project in Visual Studio. We'd like you to name your repository TEC-Internship-[FirstName]-[LastName]
+3. Create your own github repository, download the source code and open the project in Visual Studio. We'd like you to name your repository TEC-Internship-[FirstName]-[LastName]
 
  # Setup & Intro
 
@@ -26,12 +26,12 @@ https://marketplace.visualstudio.com/items?itemName=ErikEJ.SQLServerCompactSQLit
 2. Change to run on multiple startup projects:
 ![Untitled4565](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/8a766183-0504-4738-ac64-3fceb34f3016)
 
-4. Once you run the applications, you will notice that 2 tabs will open:
+3. Once you run the applications, you will notice that 2 tabs will open:
 ![Untitled90](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/1fa4879d-8ded-4a1a-b36b-ffc35dc49669)
 
 One represents the Api app, and the other is the Web App.
 
-6. If you for example, click on the person tab, you will get an exception:
+4. If you for example, click on the person tab, you will get an exception:
 ![Untitled91](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/233d05f2-54bd-4b68-ae9b-84569a8d66b0)
 In order to fix this, you will have to do a few things:<br>
 5.a. Change the path of the database with your own, in APIDbContext.cs: <br>
@@ -40,7 +40,7 @@ In order to fix this, you will have to do a few things:<br>
 5.b. Change the port in the Controller's of the Web App: <br>
 ![Capture000](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/ebdcc827-c7e9-49c1-b560-bfebb633146d)
 
-7. Now after you saved your changes and run the apps, once you clicked on the Person button in the web app, you should be able to see some people that have been fetched from the database, and their data to be displayed:
+6. Now after you saved your changes and run the apps, once you clicked on the Person button in the web app, you should be able to see some people that have been fetched from the database, and their data to be displayed:
 ![Capture45](https://github.com/AgrostemmaGithago/TEC-Internship/assets/129935966/92f7ea2a-9abe-46ac-a4a2-918fcffbc7ba)
 
 <br>
@@ -81,9 +81,12 @@ Database diagram: <br>
 7. As a developer I want to not change the URL's of the api in all of the Controllers <br>
    Details:  Ctrl + Shit + F in the entire solution and search for HINT
 <br><br>
-Are you bored? get alot of points by: <br>
-8. Adding Authentication to the app: <br>
+Are you bored yet? get alot of points by: <br>
+8. Adding Authentication to the app, you can implement as you please, but to give you some ideas: <br>
     	- create a Login View with admin username and password. could be a popup or login in the Header of the app. <br>
-    	- create an Admin Table with user information (the password is not necessary to be encrypted, but yet again, it would be nice) <br>
+    	- create an Admin Table with user information <br>
     	- I should not be able to do any of the RESTful api calls on person, persondetails, salary or department tables unless I am logged in <br>
-9. Having too much time on your hands? Do any kind of improvements you wish. Hell, create another app and do it 3-tier architecture as far as we're concerned. 
+
+9. Having too much time on your hands? Do any kind of improvements you wish. Just let us know via e-mail once you send the link with your repository what improvements you've done.
+    
+     
