@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Internship.Model
+namespace ApiApp.DataAccessLayer.Model
 {
     public class Salary
     {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiApp.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20240602142722_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240605143157_Details")]
+    partial class Details
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,7 +19,7 @@ namespace ApiApp.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.5");
 
-            modelBuilder.Entity("Internship.Model.Department", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Department", b =>
                 {
                     b.Property<int>("DepartmentId")
                         .ValueGeneratedOnAdd()
@@ -34,7 +34,7 @@ namespace ApiApp.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("Internship.Model.Person", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Person", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,31 @@ namespace ApiApp.Migrations
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("Internship.Model.Position", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.PersonDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BirthDay")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PersonCity")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("PersonDetails");
+                });
+
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Position", b =>
                 {
                     b.Property<int>("PositionId")
                         .ValueGeneratedOnAdd()
@@ -94,7 +118,7 @@ namespace ApiApp.Migrations
                     b.ToTable("Positions");
                 });
 
-            modelBuilder.Entity("Internship.Model.Salary", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Salary", b =>
                 {
                     b.Property<int>("SalaryId")
                         .ValueGeneratedOnAdd()
@@ -108,15 +132,15 @@ namespace ApiApp.Migrations
                     b.ToTable("Salaries");
                 });
 
-            modelBuilder.Entity("Internship.Model.Person", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Person", b =>
                 {
-                    b.HasOne("Internship.Model.Position", "Position")
+                    b.HasOne("ApiApp.DataAccessLayer.Model.Position", "Position")
                         .WithMany("Persons")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Internship.Model.Salary", "Salary")
+                    b.HasOne("ApiApp.DataAccessLayer.Model.Salary", "Salary")
                         .WithMany("Persons")
                         .HasForeignKey("SalaryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -127,9 +151,20 @@ namespace ApiApp.Migrations
                     b.Navigation("Salary");
                 });
 
-            modelBuilder.Entity("Internship.Model.Position", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.PersonDetail", b =>
                 {
-                    b.HasOne("Internship.Model.Department", "Department")
+                    b.HasOne("ApiApp.DataAccessLayer.Model.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Position", b =>
+                {
+                    b.HasOne("ApiApp.DataAccessLayer.Model.Department", "Department")
                         .WithMany("Positions")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -138,17 +173,17 @@ namespace ApiApp.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("Internship.Model.Department", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Department", b =>
                 {
                     b.Navigation("Positions");
                 });
 
-            modelBuilder.Entity("Internship.Model.Position", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Position", b =>
                 {
                     b.Navigation("Persons");
                 });
 
-            modelBuilder.Entity("Internship.Model.Salary", b =>
+            modelBuilder.Entity("ApiApp.DataAccessLayer.Model.Salary", b =>
                 {
                     b.Navigation("Persons");
                 });

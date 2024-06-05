@@ -1,4 +1,4 @@
-﻿namespace Internship.ObjectModel
+﻿namespace ApiApp.DataAccessLayer.ObjectModel
 {
     public class PersonInformation
     {

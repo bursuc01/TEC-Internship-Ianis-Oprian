@@ -1,22 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Internship.Model
+namespace ApiApp.DataAccessLayer.Model
 {
     public class Person
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Name  { get; set; }
+        public string Name { get; set; }
         [Required]
-        public string Surname  { get; set; }
+        public string Surname { get; set; }
         [Required]
-        public int Age  { get; set; }
+        public int Age { get; set; }
         [Required]
-        public string Email  { get; set; }
+        public string Email { get; set; }
         [Required]
-        public string Address  { get; set; }
+        public string Address { get; set; }
         [ForeignKey("Position")]
         public int PositionId { get; set; }
         public Position Position { get; set; }
