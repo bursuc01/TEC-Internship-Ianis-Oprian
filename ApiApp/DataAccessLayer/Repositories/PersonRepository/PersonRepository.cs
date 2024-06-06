@@ -77,14 +77,25 @@ namespace ApiApp.DataAccessLayer.Repositories.PersonRepository
 
         public async Task<bool> DeletePersonAsync(int id)
         {
-            var person = await _context.Persons.FindAsync(id);
+            var person = await _context.Persons
+                .Include(x => x.Position)
+                .Include(x => x.Salary)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
             if (person == null)
             {
                 return false;
             }
 
-            person.Position.Persons.Remove(person);
-            person.Salary.Persons.Remove(person);
+            if (person.Position != null)
+            {
+                person.Position.Persons.Remove(person);
+            }
+
+            if (person.Salary != null)
+            {
+                person.Salary.Persons.Remove(person);
+            }
 
             _context.Persons.Remove(person);
             await _context.SaveChangesAsync();

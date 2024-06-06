@@ -29,6 +29,7 @@ namespace WebApp
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSingleton(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

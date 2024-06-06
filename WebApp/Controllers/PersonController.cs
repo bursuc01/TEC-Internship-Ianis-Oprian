@@ -14,21 +14,21 @@ namespace WebApp.Controllers
 {
     public class PersonController : Controller
     {
-        //HINT task 8 start
 
-/*        private readonly IConfiguration _config;
-        private readonly string _api;
+        private readonly IConfiguration _config;
+        private readonly string _apiPerson;
+        private readonly HttpClient _client;
+
         public PersonController(IConfiguration config)
         {
             _config = config;
-            _api = _config.GetValue<string>("");
-        }*/
+            _apiPerson = _config.GetValue<string>("ApiSettings:ApiUrl") + "Persons/";
+            _client = new HttpClient();
+        }
 
-        //HINT task 8 end
         public async Task<IActionResult> Index()
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage message = await client.GetAsync("http://localhost:5229/api/persons");
+            HttpResponseMessage message = await _client.GetAsync(_apiPerson);
             if(message.IsSuccessStatusCode)
             {
                 var jstring = await message.Content.ReadAsStringAsync();
@@ -38,20 +38,35 @@ namespace WebApp.Controllers
             else
             return View(new List<PersonInformation>());
         }
+
+        public async Task<IActionResult> Delete(int Id)
+        {
+            HttpResponseMessage message = await _client.DeleteAsync(_apiPerson + Id);
+            if (message.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "There is an API Error");
+                return View();
+            }
+        }
+
         public IActionResult Add()
         {
             Person person = new Person();
             return View(person);
         }
+
         [HttpPost]
         public async Task<IActionResult> Add(Person person)
         {
             if(ModelState.IsValid)
             {
-                HttpClient client = new HttpClient();
                 var jsonPerson = JsonConvert.SerializeObject(person);
                 StringContent content = new StringContent(jsonPerson,Encoding.UTF8,"application/json");
-                HttpResponseMessage message = await client.PostAsync("http://localhost:5229/api/persons", content);
+                HttpResponseMessage message = await _client.PostAsync(_apiPerson, content);
                 if(message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -71,8 +86,7 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Update(int Id)
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage message = await client.GetAsync("http://localhost:5229/api/persons/" + Id);
+            HttpResponseMessage message = await _client.GetAsync(_apiPerson + Id);
             if (message.IsSuccessStatusCode)
             {
                 var jstring = await message.Content.ReadAsStringAsync();
@@ -82,15 +96,15 @@ namespace WebApp.Controllers
             else
                 return RedirectToAction("Add");
         }
+
         [HttpPost]
         public async Task<IActionResult> Update(Person person)
         {
             if (ModelState.IsValid)
             {
-                HttpClient client = new HttpClient();
                 var jsonperson = JsonConvert.SerializeObject(person);
                 StringContent content = new StringContent(jsonperson, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await client.PutAsync("http://localhost:5229/api/persons", content);
+                HttpResponseMessage message = await _client.PutAsync(_apiPerson, content);
                 if(message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");

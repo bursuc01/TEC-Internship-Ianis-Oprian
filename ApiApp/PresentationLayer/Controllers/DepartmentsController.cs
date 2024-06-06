@@ -1,5 +1,6 @@
 ﻿using ApiApp.BusinessLogicLayer.DepartmentBLL;
 using ApiApp.DataAccessLayer.Model;
+using ApiApp.DataAccessLayer.ObjectModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -23,51 +24,51 @@ namespace ApiApp.PresentationLayer.Controllers
             return Ok(departments);
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult Get(int Id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
-            /*
-            var db = new APIDbContext();
-            Department department = db.Departments.Find(Id);
+            var department = await _departmentService.GetDepartmentByIdAsync(id);
             if (department == null)
+            {
                 return NotFound();
-            else
-                return Ok(department);
-            */
-            return NotFound();
+            }
+            
+            return Ok(department);
         }
 
         [HttpPost]
-        public IActionResult AddDepartment(Department department)
+        public async Task<IActionResult> AddDepartment(DepartmentCreation department)
         {
-            /*
-            if (ModelState.IsValid)
+            
+            if(await _departmentService.PostDepartmentAsync(department))
             {
-                var db = new APIDbContext();
-                db.Departments.Add(department);
-                db.SaveChanges();
                 return Created("", department);
             }
-            else
-                return BadRequest();
-            */
+
             return BadRequest();
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteDepartment(int id)
+        {
+            if (await _departmentService.DeleteDepartmentAsync(id))
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
         [HttpPut]
-        public IActionResult UpdateDepartment(Department department)
+        public async Task<IActionResult> UpdateDepartment(DepartmentCreation department)
         {
 
-            //if (ModelState.IsValid)
-            //{
-            //    var db = new APIDbContext();
-            //    Department updateDepartment = db.Departments.Find(department.DepartmentId);
-            //    updateDepartment.DepartmentName = department.DepartmentName;
-            //    db.SaveChanges();
-            //    return NoContent();
-            //}
-            //else
-            //    return BadRequest();
-            return NoContent();
+            if (await _departmentService.PutDepartmentAsync(department))
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }

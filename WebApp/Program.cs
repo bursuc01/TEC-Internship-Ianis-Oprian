@@ -19,7 +19,16 @@ namespace WebApp
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                //HINT task 8: ConfigureAppConfiguration here in order to retrieve items from appsettings.json
+                 .ConfigureAppConfiguration((hostingContext, config) =>
+                 {
+                     config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+                     config.AddEnvironmentVariables();
+                     if (args != null)
+                     {
+                         config.AddCommandLine(args);
+                     }
+                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

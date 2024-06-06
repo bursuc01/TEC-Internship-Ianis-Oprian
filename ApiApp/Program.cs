@@ -7,6 +7,8 @@ using ApiApp.DataAccessLayer.Repositories.SalaryRepository;
 using ApiApp.BusinessLogicLayer.SalaryBLL;
 using ApiApp.BusinessLogicLayer.DepartmentBLL;
 using ApiApp.DataAccessLayer.Repositories.DepartmentRepository;
+using ApiApp.BusinessLogicLayer.PersonDetailsBLL;
+using ApiApp.DataAccessLayer.Repositories.PersonDetailsRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,8 @@ builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IPersonDetailsService, PersonDetailsService>();
+builder.Services.AddScoped<IPersonDetailsRepository, PersonDetailsRepository>();
 
 var app = builder.Build();
 

@@ -57,10 +57,10 @@ namespace ApiApp.PresentationLayer.Controllers
                 return BadRequest();
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteAsync(int Id)
         {
-            if (await _personService.DeletePersonAsync(id))
+            if (await _personService.DeletePersonAsync(Id))
             {
                 return Ok();
             }
@@ -71,7 +71,6 @@ namespace ApiApp.PresentationLayer.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(PersonCreation person)
         {
-
             if(await _personService.PutPersonAsync(person))
             {
                 return Ok();
