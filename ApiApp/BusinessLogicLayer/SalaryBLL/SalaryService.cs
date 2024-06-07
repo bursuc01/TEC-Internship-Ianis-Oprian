@@ -29,10 +29,22 @@ namespace ApiApp.BusinessLogicLayer.SalaryBLL
             return _mapper.Map<IEnumerable<SalaryInformation>>(salaries);
         }
 
+        public async Task<SalaryInformation> GetSalaryByIdAsync(int id)
+        {
+            var salary = await _salaryRepository.GetSalaryByIdAsync(id);
+            return _mapper.Map<SalaryInformation>(salary);
+        }
+
         public async Task<bool> PostSalaryAsync(SalaryInformation salary)
         {
             var salaryMapped = _mapper.Map<Salary>(salary);
             return await _salaryRepository.PostSalaryAsync(salaryMapped);
+        }
+
+        public Task<bool> PutSalaryAsync(SalaryInformation salary)
+        {
+            var salaryUpdated = _mapper.Map<Salary>(salary);
+            return _salaryRepository.PutSalaryAsync(salaryUpdated);
         }
     }
 }

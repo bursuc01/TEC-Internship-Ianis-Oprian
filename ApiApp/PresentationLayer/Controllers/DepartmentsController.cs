@@ -48,7 +48,7 @@ namespace ApiApp.PresentationLayer.Controllers
             return BadRequest();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDepartment(int id)
         {
             if (await _departmentService.DeleteDepartmentAsync(id))

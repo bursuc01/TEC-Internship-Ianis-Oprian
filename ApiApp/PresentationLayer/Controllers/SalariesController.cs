@@ -21,10 +21,17 @@ namespace ApiApp.PresentationLayer.Controllers
             return Ok(salaries);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetByIdAsync(int Id)
         {
-            if (await _salaryService.DeleteSalaryAsync(id))
+            var salary = await _salaryService.GetSalaryByIdAsync(Id);
+            return Ok(salary);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteAsync(int Id)
+        {
+            if (await _salaryService.DeleteSalaryAsync(Id))
             {
                 return Ok();
             }
@@ -39,6 +46,17 @@ namespace ApiApp.PresentationLayer.Controllers
             {
                 return Ok();
             }
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutAsync(SalaryInformation salary)
+        {
+            if (await _salaryService.PutSalaryAsync(salary))
+            {
+                return Ok();
+            }
+
             return NoContent();
         }
     }

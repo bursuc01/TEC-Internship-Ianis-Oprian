@@ -1,6 +1,7 @@
 ﻿using ApiApp.DataAccessLayer.Model;
 using SQLitePCL;
 using Microsoft.EntityFrameworkCore;
+using ApiApp.DataAccessLayer.ObjectModel;
 
 namespace ApiApp.DataAccessLayer.Repositories.SalaryRepository
 {
@@ -50,11 +51,38 @@ namespace ApiApp.DataAccessLayer.Repositories.SalaryRepository
             return salaries;
         }
 
+        public async Task<Salary> GetSalaryByIdAsync(int id)
+        {
+            var salary = await _context.Salaries
+                .FirstOrDefaultAsync(x => x.SalaryId == id);
+
+            return salary;
+        }
+
         public async Task<bool> PostSalaryAsync(Salary salary)
         {
             await _context.Salaries.AddAsync(salary);
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> PutSalaryAsync(Salary salary)
+        {
+            var salaryUpdated = await _context.Salaries
+                .Include(x => x.Persons)
+                .FirstOrDefaultAsync(x => x.SalaryId == salary.SalaryId);
+
+            if (salaryUpdated == null)
+            {
+                return false;     
+            }
+
+            salaryUpdated.Amount = salary.Amount;
+
+            _context.Salaries.Update(salaryUpdated);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

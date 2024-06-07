@@ -8,6 +8,8 @@ namespace ApiApp.BusinessLogicLayer.SalaryBLL
         public Task<IEnumerable<SalaryInformation>> GetSalariesAsync();
         public Task<bool> PostSalaryAsync(SalaryInformation salary);
         public Task<bool> DeleteSalaryAsync(int id);
+        public Task<bool> PutSalaryAsync(SalaryInformation salary);
+        public Task<SalaryInformation> GetSalaryByIdAsync(int id);
 
     }
 }

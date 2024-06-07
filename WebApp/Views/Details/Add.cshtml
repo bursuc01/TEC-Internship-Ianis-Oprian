@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Add";
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *,AuthoringTagHelpers
+
+@model PersonDetails
+
+<form method="post" asp-action="Add">
+    <input type="hidden" asp-for="PersonId" />
+
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+            <label> Birth Date</label>
+            <input asp-for="BirthDay" class="form-control" />
+            <span asp-validation-for="BirthDay" class="text-danger"></span>
+        </div> 
+        <div class="col-md-4 mb-3">
+            <label> City of Residence</label>
+            <input asp-for="PersonCity" class="form-control" />
+            <span asp-validation-for="PersonCity" class="text-danger"></span>
+        </div>
+    </div>   
+    <button type="submit" class="btn btn-primary">Save</button>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+</form>

@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Update";
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *,AuthoringTagHelpers
+
+@model Salary
+
+<form method="post" asp-action="Update">
+    <input type="hidden" asp-for="SalaryId" />
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+            <label>Amount</label>
+            <input asp-for="Amount" class="form-control" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+    </div>   
+    <button type="submit" class="btn btn-primary">Save</button>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+</form>

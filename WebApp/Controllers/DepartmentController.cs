@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,11 +11,21 @@ namespace WebApp.Controllers
 {
     public class DepartmentController : Controller
     {
+        private readonly IConfiguration _config;
+        private readonly string _apiDep;
+        private readonly HttpClient _client;
+
+        public DepartmentController(IConfiguration config)
+        {
+            _config = config;
+            _apiDep = _config.GetValue<string>("ApiSettings:ApiUrl") + "Departments/";
+            _client = new HttpClient();
+        }
+
         public async Task<IActionResult> Index()
         {
             List<Department> list = new List<Department>();
-            HttpClient client = new HttpClient();
-            HttpResponseMessage responseMessage = await client.GetAsync("http://localhost:5229/api/departments");
+            HttpResponseMessage responseMessage = await _client.GetAsync(_apiDep);
 
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -33,12 +44,12 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Department department)
         {
+            department.PositionIds = new List<int>();
             if (ModelState.IsValid)
             {
-                HttpClient client = new HttpClient();
                 var jsondepartment = JsonConvert.SerializeObject(department);
                 StringContent content = new StringContent(jsondepartment, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await client.PostAsync("http://localhost:5229/api/departments", content);
+                HttpResponseMessage message = await _client.PostAsync(_apiDep, content);
                 if (message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -56,10 +67,23 @@ namespace WebApp.Controllers
             }
         }
 
+        public async Task<IActionResult> Delete(int Id)
+        {
+            HttpResponseMessage message = await _client.DeleteAsync(_apiDep + Id);
+            if (message.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "There is an API Error");
+                return View();
+            }
+        }
+
         public async Task<IActionResult> Update(int Id)
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage message = await client.GetAsync("http://localhost:5229/api/departments/" + Id);
+            HttpResponseMessage message = await _client.GetAsync(_apiDep + Id);
             if (message.IsSuccessStatusCode)
             {
                 var jstring = await message.Content.ReadAsStringAsync();
@@ -72,12 +96,13 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(Department department)
         {
+            department.PositionIds = new List<int>();
+
             if (ModelState.IsValid)
             {
-                HttpClient client = new HttpClient();
                 var jsondepartment = JsonConvert.SerializeObject(department);
                 StringContent content = new StringContent(jsondepartment, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await client.PutAsync("http://localhost:5229/api/departments", content);
+                HttpResponseMessage message = await _client.PutAsync(_apiDep, content);
                 if (message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");

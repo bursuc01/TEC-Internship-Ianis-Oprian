@@ -7,6 +7,8 @@ namespace ApiApp.DataAccessLayer.Repositories.SalaryRepository
     {
         public Task<IEnumerable<Salary>> GetSalariesAsync();
         public Task<bool> PostSalaryAsync(Salary salary);
-        public Task<bool> DeleteSalaryAsync(int id);
+        public Task<bool> DeleteSalaryAsync(int id); 
+        public Task<bool> PutSalaryAsync(Salary salary);
+        public Task<Salary> GetSalaryByIdAsync(int id);
     }
 }

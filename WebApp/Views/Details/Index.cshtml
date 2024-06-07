@@ -6,8 +6,10 @@
 
 @model PersonDetails
 
-<h1>Person Details</h1>
 
+<h1>Person Details</h1>
+@if (Model.BirthDay != null && Model.PersonCity != null)
+                    {
 <table class="table table-hover">
         <thead>
             <tr>
@@ -19,11 +21,15 @@
            <tr>
                 <td>@Model.BirthDay</td>
                 <td>@Model.PersonCity</td>
-
                 <td>
-                     <a style="color:white" class="btn btn-success" asp-action="Update" asp-route-id="@Model.Id">Update</a>
-                     <a style="color:white" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                   <a style="color:white" class="btn btn-success" asp-action="Update" asp-route-id="@Model.Id">Update</a>
+                   <a style="color:white" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
                 </td>
            </tr>
         </tbody>
     </table>
+}
+else
+{
+      <a class="btn btn-primary" class="btn btn-danger" asp-action="Add" asp-route-id="@Model.PersonId">Add</a>
+}
