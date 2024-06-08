@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@addTagHelper *,Microfost.AspNetCore.Mvc.TagHelpers
+@addTagHelper *,AuthoringTagHelpers
+
+@model User
+
+<div>
+    <p>Hello, @Model.Name!</p>
+    <hr>
+    <a style="color:white" class="btn btn-primary" asp-controller="Person" asp-action="Index">Person</a>
+    <a style="color:white" class="btn btn-primary" asp-controller="Department" asp-action="Index">Department</a>
+    <a style="color:white" class="btn btn-primary" asp-controller="Salary" asp-action="Index">Salary</a>
+    @if (Model.IsAdmin == true)
+    {    
+        <a style="color:white" class="btn btn-primary" asp-controller="User" asp-action="Index">User</a>
+    }
+</div>

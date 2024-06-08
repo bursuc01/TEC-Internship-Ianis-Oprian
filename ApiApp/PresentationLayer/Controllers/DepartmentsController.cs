@@ -1,6 +1,7 @@
 ﻿using ApiApp.BusinessLogicLayer.DepartmentBLL;
 using ApiApp.DataAccessLayer.Model;
 using ApiApp.DataAccessLayer.ObjectModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace ApiApp.PresentationLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DepartmentsController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;

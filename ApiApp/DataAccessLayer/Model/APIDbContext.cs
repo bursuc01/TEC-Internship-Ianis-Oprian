@@ -8,7 +8,7 @@ namespace ApiApp.DataAccessLayer.Model
             : base(options)
         {
         }
-
+        public DbSet<User> Users { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Salary> Salaries { get; set; }

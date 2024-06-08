@@ -1,11 +1,13 @@
 ﻿using ApiApp.BusinessLogicLayer.PersonDetailsBLL;
 using ApiApp.DataAccessLayer.ObjectModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiApp.PresentationLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PersonDetailsController : Controller
     {
         private readonly IPersonDetailsService _personDetailsService;

@@ -11,6 +11,7 @@ namespace ApiApp.DataAccessLayer.Mapper
             CreateMap<PersonCreation, Person>().ReverseMap();
             CreateMap<SalaryInformation, Salary>().ReverseMap();
             CreateMap<PersonDetailsInformation, PersonDetail>().ReverseMap();
+            CreateMap<UserInformation, User>().ReverseMap();
         }
     }
 }

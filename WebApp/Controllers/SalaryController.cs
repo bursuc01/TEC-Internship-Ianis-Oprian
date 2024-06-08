@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http.Headers;
 
 namespace WebApp.Controllers
 {
@@ -26,9 +28,11 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Salary> list = new List<Salary>();
-            HttpClient client = new HttpClient();
-            HttpResponseMessage message = await client.GetAsync(_apiSalary);
+            List<Salary> list = new List<Salary>(); 
+            var request = new HttpRequestMessage(HttpMethod.Get, _apiSalary);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+            HttpResponseMessage message = await _client.SendAsync(request);
             if (message.IsSuccessStatusCode)
             {
                 var jstring = await message.Content.ReadAsStringAsync();
@@ -41,8 +45,10 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Delete(int Id)
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage message = await client.DeleteAsync(_apiSalary + Id);
+            var request = new HttpRequestMessage(HttpMethod.Delete, _apiSalary + Id);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+            HttpResponseMessage message = await _client.SendAsync(request);
             if (message.IsSuccessStatusCode)
                 return RedirectToAction("Index");
             else
@@ -57,13 +63,17 @@ namespace WebApp.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add(Salary details)
+        public async Task<IActionResult> Add(Salary salary)
         {
             if (ModelState.IsValid)
             {
-                var jsonDetails = JsonConvert.SerializeObject(details);
-                StringContent content = new StringContent(jsonDetails, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await _client.PostAsync(_apiSalary, content);
+                var request = new HttpRequestMessage(HttpMethod.Post, _apiSalary);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+                var content = new StringContent(JsonConvert.SerializeObject(salary), Encoding.UTF8, "application/json");
+                request.Content = content;
+
+                HttpResponseMessage message = await _client.SendAsync(request);
                 if (message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -71,19 +81,22 @@ namespace WebApp.Controllers
                 else
                 {
                     ModelState.AddModelError("", "There is an API Error");
-                    return View(details);
+                    return View(salary);
                 }
 
             }
             else
             {
-                return View(details);
+                return View(salary);
             }
         }
 
         public async Task<IActionResult> Update(int Id)
         {
-            HttpResponseMessage message = await _client.GetAsync(_apiSalary + Id);
+            var request = new HttpRequestMessage(HttpMethod.Get, _apiSalary + Id);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+            HttpResponseMessage message = await _client.SendAsync(request);
             if (message.IsSuccessStatusCode)
             {
                 var jstring = await message.Content.ReadAsStringAsync();
@@ -95,13 +108,17 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Salary details)
+        public async Task<IActionResult> Update(Salary salary)
         {
             if (ModelState.IsValid)
             {
-                var jsonDetails = JsonConvert.SerializeObject(details);
-                StringContent content = new StringContent(jsonDetails, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await _client.PutAsync(_apiSalary, content);
+                var request = new HttpRequestMessage(HttpMethod.Put, _apiSalary);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+                var content = new StringContent(JsonConvert.SerializeObject(salary), Encoding.UTF8, "application/json");
+                request.Content = content;
+
+                HttpResponseMessage message = await _client.SendAsync(request);
                 if (message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -109,13 +126,13 @@ namespace WebApp.Controllers
                 else
                 {
                     ModelState.AddModelError("", "There is an API Error");
-                    return View(details);
+                    return View(salary);
                 }
 
             }
             else
             {
-                return View(details);
+                return View(salary);
             }
         }
     }

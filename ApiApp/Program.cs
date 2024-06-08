@@ -9,19 +9,44 @@ using ApiApp.BusinessLogicLayer.DepartmentBLL;
 using ApiApp.DataAccessLayer.Repositories.DepartmentRepository;
 using ApiApp.BusinessLogicLayer.PersonDetailsBLL;
 using ApiApp.DataAccessLayer.Repositories.PersonDetailsRepository;
+using ApiApp.BusinessLogicLayer.UserBLL;
+using ApiApp.DataAccessLayer.Repositories.UserRepository;
+using ApiApp.BusinessLogicLayer.TokenBLL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add DbContext
 builder.Services.AddDbContext<APIDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configuration of the token on arrival 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    o.SaveToken = true;
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = false,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey
+            (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+    };
+});
 
 // Auto mapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
@@ -35,6 +60,10 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IPersonDetailsService, PersonDetailsService>();
 builder.Services.AddScoped<IPersonDetailsRepository, PersonDetailsRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
@@ -45,6 +74,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

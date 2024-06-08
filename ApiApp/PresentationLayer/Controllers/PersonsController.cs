@@ -1,6 +1,7 @@
 ﻿using ApiApp.BusinessLogicLayer.PersonBLL;
 using ApiApp.DataAccessLayer.Model;
 using ApiApp.DataAccessLayer.ObjectModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace ApiApp.PresentationLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PersonsController : ControllerBase
     {
         IPersonService _personService;

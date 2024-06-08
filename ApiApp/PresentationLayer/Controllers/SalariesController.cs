@@ -1,11 +1,13 @@
 ﻿using ApiApp.BusinessLogicLayer.SalaryBLL;
 using ApiApp.DataAccessLayer.ObjectModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiApp.PresentationLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SalariesController : ControllerBase
     {
         private readonly ISalaryService _salaryService;

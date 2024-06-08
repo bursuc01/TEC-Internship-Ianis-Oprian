@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using WebApp.Models;
@@ -25,11 +27,14 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             List<Department> list = new List<Department>();
-            HttpResponseMessage responseMessage = await _client.GetAsync(_apiDep);
+            var request = new HttpRequestMessage(HttpMethod.Get, _apiDep);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
-            if (responseMessage.IsSuccessStatusCode)
+            HttpResponseMessage message = await _client.SendAsync(request);
+
+            if (message.IsSuccessStatusCode)
             {
-                var jstring = await responseMessage.Content.ReadAsStringAsync();
+                var jstring = await message.Content.ReadAsStringAsync();
                 list = JsonConvert.DeserializeObject<List<Department>>(jstring);
                 return View(list);
             }
@@ -41,15 +46,20 @@ namespace WebApp.Controllers
             Department department = new Department();
             return View(department);
         }
+
         [HttpPost]
         public async Task<IActionResult> Add(Department department)
         {
             department.PositionIds = new List<int>();
             if (ModelState.IsValid)
             {
-                var jsondepartment = JsonConvert.SerializeObject(department);
-                StringContent content = new StringContent(jsondepartment, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await _client.PostAsync(_apiDep, content);
+                var request = new HttpRequestMessage(HttpMethod.Post, _apiDep);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+                var content = new StringContent(JsonConvert.SerializeObject(department), Encoding.UTF8, "application/json");
+                request.Content = content;
+
+                HttpResponseMessage message = await _client.SendAsync(request);
                 if (message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -69,7 +79,10 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Delete(int Id)
         {
-            HttpResponseMessage message = await _client.DeleteAsync(_apiDep + Id);
+            var request = new HttpRequestMessage(HttpMethod.Delete, _apiDep + Id);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+            HttpResponseMessage message = await _client.SendAsync(request);
             if (message.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
@@ -83,7 +96,10 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Update(int Id)
         {
-            HttpResponseMessage message = await _client.GetAsync(_apiDep + Id);
+            var request = new HttpRequestMessage(HttpMethod.Get, _apiDep + Id);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+            HttpResponseMessage message = await _client.SendAsync(request);
             if (message.IsSuccessStatusCode)
             {
                 var jstring = await message.Content.ReadAsStringAsync();
@@ -100,9 +116,13 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                var jsondepartment = JsonConvert.SerializeObject(department);
-                StringContent content = new StringContent(jsondepartment, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await _client.PutAsync(_apiDep, content);
+                var request = new HttpRequestMessage(HttpMethod.Put, _apiDep);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+                var content = new StringContent(JsonConvert.SerializeObject(department), Encoding.UTF8, "application/json");
+                request.Content = content;
+
+                HttpResponseMessage message = await _client.SendAsync(request);
                 if (message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");

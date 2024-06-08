@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using WebApp.Models;
@@ -24,7 +26,10 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index(int Id)
         {
-            HttpResponseMessage message = await _client.GetAsync(_apiDetails + Id);
+            var request = new HttpRequestMessage(HttpMethod.Get, _apiDetails + Id);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+            HttpResponseMessage message = await _client.SendAsync(request);
             if (message.IsSuccessStatusCode)
             {
                 var jstring = await message.Content.ReadAsStringAsync();
@@ -37,7 +42,10 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Delete(int Id)
         {
-            HttpResponseMessage message = await _client.DeleteAsync(_apiDetails + Id);
+            var request = new HttpRequestMessage(HttpMethod.Delete, _apiDetails + Id);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+            HttpResponseMessage message = await _client.SendAsync(request);
             if (message.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index", "Person");
@@ -61,9 +69,13 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var jsonDetails = JsonConvert.SerializeObject(details);
-                StringContent content = new StringContent(jsonDetails, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await _client.PostAsync(_apiDetails, content);
+                var request = new HttpRequestMessage(HttpMethod.Post, _apiDetails);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+                var content = new StringContent(JsonConvert.SerializeObject(details), Encoding.UTF8, "application/json");
+                request.Content = content;
+
+                HttpResponseMessage message = await _client.SendAsync(request);
                 if (message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index", "Person");
@@ -83,7 +95,10 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Update(int Id)
         {
-            HttpResponseMessage message = await _client.GetAsync(_apiDetails + Id);
+            var request = new HttpRequestMessage(HttpMethod.Get, _apiDetails + Id);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+            HttpResponseMessage message = await _client.SendAsync(request);
             if (message.IsSuccessStatusCode)
             {
                 var jstring = await message.Content.ReadAsStringAsync();
@@ -99,9 +114,13 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var jsonDetails = JsonConvert.SerializeObject(details);
-                StringContent content = new StringContent(jsonDetails, Encoding.UTF8, "application/json");
-                HttpResponseMessage message = await _client.PutAsync(_apiDetails, content);
+                var request = new HttpRequestMessage(HttpMethod.Put, _apiDetails);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+                var content = new StringContent(JsonConvert.SerializeObject(details), Encoding.UTF8, "application/json");
+                request.Content = content;
+
+                HttpResponseMessage message = await _client.SendAsync(request);
                 if (message.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index", "Person");
