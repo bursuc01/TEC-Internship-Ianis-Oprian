@@ -1,6 +1,7 @@
 ﻿using ApiApp.DataAccessLayer.Model;
 using ApiApp.DataAccessLayer.ObjectModel;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ApiApp.DataAccessLayer.Repositories.DepartmentRepository
 {
@@ -17,10 +18,24 @@ namespace ApiApp.DataAccessLayer.Repositories.DepartmentRepository
             var department = await _context.Departments
                 .Include(x => x.Positions)
                 .FirstOrDefaultAsync(x => x.DepartmentId == id);
-
+            
             if (department == null)
             {
                 return false;
+            }
+
+            var placeHolder = await _context.Departments
+                .Include(x => x.Positions)
+                .FirstOrDefaultAsync(x => x.DepartmentId != id);
+
+            if (placeHolder == null)
+            {
+                return false;
+            }
+
+            foreach(var value in department.Positions)
+            {
+                placeHolder.Positions.Add(value);
             }
 
             _context.Departments .Remove(department);
@@ -28,12 +43,22 @@ namespace ApiApp.DataAccessLayer.Repositories.DepartmentRepository
             return true;
         }
 
-        public async Task<Department> GetDepartmentByIdAsync(int id)
+        public async Task<DepartmentCreation> GetDepartmentByIdAsync(int id)
         {
             var department = await _context.Departments
+                .Include(x => x.Positions)
                 .FirstOrDefaultAsync(x => x.DepartmentId == id);
 
-            return department;
+            var departmentCreation = new DepartmentCreation();
+            departmentCreation.DepartmentId = department.DepartmentId;
+            departmentCreation.DepartmentName = department.DepartmentName;
+
+            foreach(var value in department.Positions)
+            {
+                departmentCreation.PositionIds.Add(value.PositionId);
+            }
+
+            return departmentCreation;
         }
 
         public async Task<IEnumerable<Department>> GetDepartmentsAsync()
@@ -97,7 +122,7 @@ namespace ApiApp.DataAccessLayer.Repositories.DepartmentRepository
                         return false;
                     }
 
-                    if (departmentUpdated.Positions.Contains(position))
+                    if (!departmentUpdated.Positions.Contains(position))
                     {
                         departmentUpdated.Positions.Add(position);
                     }

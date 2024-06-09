@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ApiApp.BusinessLogicLayer.TokenBLL
@@ -34,6 +35,16 @@ namespace ApiApp.BusinessLogicLayer.TokenBLL
             );
 
             return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+        }
+
+        public string Decrypt(string message, int key)
+        {
+            var encryptedMessage = new StringBuilder();
+            foreach (char c in message)
+            {
+                encryptedMessage.Append((char)(c - key));
+            }
+            return encryptedMessage.ToString();
         }
     }
 }

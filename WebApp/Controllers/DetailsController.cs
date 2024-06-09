@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -26,6 +24,13 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index(int Id)
         {
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, _apiDetails + Id);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
@@ -59,6 +64,13 @@ namespace WebApp.Controllers
 
         public IActionResult Add(int Id)
         {
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             PersonDetails details = new PersonDetails{ PersonId = Id};
             return View(details);
         }
@@ -95,6 +107,13 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Update(int Id)
         {
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, _apiDetails + Id);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
@@ -136,6 +155,10 @@ namespace WebApp.Controllers
             {
                 return View(details);
             }
+        }
+        public IActionResult Back(string controller)
+        {
+            return RedirectToAction("Index", controller);
         }
     }
 }

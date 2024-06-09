@@ -26,6 +26,13 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             List<Department> list = new List<Department>();
             var request = new HttpRequestMessage(HttpMethod.Get, _apiDep);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
@@ -43,14 +50,38 @@ namespace WebApp.Controllers
         }
         public IActionResult Add()
         {
-            Department department = new Department();
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            DepartmentCreation department = new DepartmentCreation();
             return View(department);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Department department)
+        public async Task<IActionResult> Add(DepartmentCreation departmentCreation)
         {
+            Department department = new Department();
             department.PositionIds = new List<int>();
+
+            var idList = departmentCreation.PositionIds.Split(',');
+
+            if (idList == null)
+            {
+                ModelState.AddModelError("Error", "Positions for the department are required!");
+                return View(department);
+            }
+
+            department.DepartmentName = departmentCreation.DepartmentName;
+            
+            foreach (var id in idList)
+            {
+                department.PositionIds.Add(int.Parse(id));
+            }
+
             if (ModelState.IsValid)
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, _apiDep);
@@ -96,6 +127,13 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Update(int Id)
         {
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, _apiDep + Id);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
@@ -104,15 +142,49 @@ namespace WebApp.Controllers
             {
                 var jstring = await message.Content.ReadAsStringAsync();
                 Department department = JsonConvert.DeserializeObject<Department>(jstring);
-                return View(department);
+                var departmetnCreation = new DepartmentCreation();
+                
+                departmetnCreation.DepartmentId = department.DepartmentId;
+                departmetnCreation.DepartmentName = department.DepartmentName;
+
+                var stringBuilder = new StringBuilder();
+                foreach (var value in department.PositionIds)
+                {
+                    stringBuilder.Append(value.ToString() + ',');
+                }
+
+                if (stringBuilder.Length > 0)
+                {
+                    stringBuilder.Remove(stringBuilder.Length - 1, 1);
+                }
+                departmetnCreation.PositionIds = stringBuilder.ToString();
+
+                return View(departmetnCreation);
             }
             else
-                return RedirectToAction("Add");
+                return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> Update(Department department)
+        public async Task<IActionResult> Update(DepartmentCreation departmentCreation)
         {
+            Department department = new Department();
             department.PositionIds = new List<int>();
+
+            var idList = departmentCreation.PositionIds.Split(',');
+
+            if (idList == null)
+            {
+                ModelState.AddModelError("Error", "Positions for the department are required!");
+                return View(department);
+            }
+
+            department.DepartmentName = departmentCreation.DepartmentName;
+            department.DepartmentId = departmentCreation.DepartmentId;
+
+            foreach (var id in idList)
+            {
+                department.PositionIds.Add(int.Parse(id));
+            }
 
             if (ModelState.IsValid)
             {
@@ -133,6 +205,9 @@ namespace WebApp.Controllers
             else
                 return View(department);
         }
-
+        public IActionResult Back(string controller)
+        {
+            return RedirectToAction("Index", controller);
+        }
     }
 }

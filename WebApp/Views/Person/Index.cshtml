@@ -11,11 +11,11 @@
     <table class="table table-hover">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Name</th>
                 <th>Position Name</th>
                 <th>Department Name</th>
                 <th>Salary</th>
-                
                 <th>Operations</th>
             </tr>
         </thead>
@@ -23,6 +23,7 @@
            @foreach (var item in Model)
            {
                <tr>
+                   <td>@item.Id</td>
                    <td>@item.Name</td>
                    <td>@item.PositionName</td>
                    <td>@item.DepartmentName</td>
@@ -37,5 +38,8 @@
            }
         </tbody>
     </table>
+
+    <a style="color:white" asp-controller="Home" asp-action="Back" class="btn btn-primary">Back</a>
+
 </div>
 

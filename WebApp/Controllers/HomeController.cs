@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using WebApp.Models;
@@ -20,6 +22,7 @@ namespace WebApp.Controllers
         private readonly IConfiguration _config;
         private readonly string _apiAuth;
         private readonly HttpClient _client;
+        private readonly int _encKey;
 
         public HomeController(
             ILogger<HomeController> logger,
@@ -28,6 +31,7 @@ namespace WebApp.Controllers
             _logger = logger;
             _config = config;
             _apiAuth = _config.GetValue<string>("ApiSettings:ApiUrl") + "Authenticate/";
+            _encKey = _config.GetValue<int>("EncryptionKey");
             _client = new HttpClient();
         }
 
@@ -38,6 +42,7 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Home(User User)
         {
+
             if (HttpContext.Session.GetString("User") != null)
             {
                 var user = HttpContext.Session.GetString("User");
@@ -47,6 +52,9 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
+                User.Name = Encrypt(User.Name, _encKey);
+                User.Password = Encrypt(User.Password, _encKey);
+
                 var jsonDetails = JsonConvert.SerializeObject(User);
                 StringContent content = new StringContent(jsonDetails, Encoding.UTF8, "application/json");
                 HttpResponseMessage message = await _client.PostAsync(_apiAuth, content);
@@ -62,9 +70,10 @@ namespace WebApp.Controllers
                     var isAdminClaim = jwtSecurityToken.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin");
                     User.IsAdmin = isAdminClaim.Value == "True";
 
+                    User.Name = Encrypt(User.Name, -_encKey);
                     HttpContext.Session.SetString("User", User.Name);
                     HttpContext.Session.SetString("IsAdmin", isAdminClaim.Value);
-
+                    
                     return View(User);
                 }
                 else
@@ -93,6 +102,21 @@ namespace WebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Back(string controller)
+        {
+            return RedirectToAction("Home", controller);
+        }
+
+        public string Encrypt(string message, int key)
+        {
+            var encryptedMessage = new StringBuilder();
+            foreach (char c in message)
+            {
+               encryptedMessage.Append((char)(c + key));
+            }
+            return encryptedMessage.ToString();
         }
     }
 }

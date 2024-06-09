@@ -27,6 +27,13 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, _apiPerson);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
@@ -60,6 +67,13 @@ namespace WebApp.Controllers
 
         public IActionResult Add()
         {
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             Person person = new Person();
             return View(person);
         }
@@ -95,6 +109,13 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Update(int Id)
         {
+            var user = HttpContext.Session.GetString("User");
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, _apiPerson + Id);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
@@ -135,6 +156,9 @@ namespace WebApp.Controllers
                 return View(person);
         }
 
-
+        public IActionResult Back(string controller)
+        {
+            return RedirectToAction("Index", controller);
+        }
     }
 }

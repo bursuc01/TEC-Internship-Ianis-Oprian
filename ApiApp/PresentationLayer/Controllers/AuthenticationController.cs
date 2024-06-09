@@ -16,13 +16,17 @@ public class AuthenticationController : ControllerBase
     private readonly IUserService _userService;
     private readonly ITokenService _authService;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _config;
 
-    public AuthenticationController(IUserService userService,
+    public AuthenticationController(
+        IUserService userService,
+        IConfiguration config,
         ITokenService authService,
         IMapper mapper)
     {
         _userService = userService;
         _authService = authService;
+        _config = config;
         _mapper = mapper;
     }
 
@@ -34,6 +38,10 @@ public class AuthenticationController : ControllerBase
             return BadRequest("Invalid client request");
         }
 
+        var _decKey = _config.GetValue<int>("DecryptionKey");
+
+        inputUser.Name = _authService.Decrypt(inputUser.Name, _decKey);
+        inputUser.Password = _authService.Decrypt(inputUser.Password, _decKey);
         // Get the list of users
         var userList = await _userService.GetUsersAsync();
 

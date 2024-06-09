@@ -18,7 +18,7 @@ namespace ApiApp.BusinessLogicLayer.PersonBLL
             _mapper = mapper;
         }
 
-        public async Task<PersonInformation> GetPersonByIdAsync(int id)
+        public async Task<PersonCreation> GetPersonByIdAsync(int id)
         {
             var person = await _personRepository.GetPersonByIdAsync(id);
             return person;

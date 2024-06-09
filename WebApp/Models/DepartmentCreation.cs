@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models
 {
-    public class Department
+    public class DepartmentCreation
     {
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
-        public virtual ICollection<int> PositionIds { get; set; }
-
+        public string PositionIds { get; set; }
     }
 }

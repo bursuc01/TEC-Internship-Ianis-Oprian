@@ -30,19 +30,22 @@ namespace ApiApp.DataAccessLayer.Repositories.PersonRepository
             return personList;
         }
 
-        public async Task<PersonInformation> GetPersonByIdAsync(int id)
+        public async Task<PersonCreation> GetPersonByIdAsync(int id)
         {
             var person = await _context
                 .Persons
                 .Include(x => x.Salary)
                 .Include(x => x.Position)
-                .Select(x => new PersonInformation()
+                .Select(x => new PersonCreation()
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    PositionName = x.Position.Name,
-                    DepartmentName = x.Position.Department.DepartmentName,
-                    Salary = x.Salary.Amount,
+                    Surname = x.Surname,
+                    Age = x.Age,
+                    Email = x.Email,
+                    Address = x.Address,
+                    PositionId = x.PositionId,
+                    SalaryId = x.SalaryId
                 })
                 .FirstOrDefaultAsync(x => x.Id == id);
 

@@ -17,7 +17,7 @@ namespace ApiApp.BusinessLogicLayer.DepartmentBLL
             return await _departmentRepository.DeleteDepartmentAsync(id);
         }
 
-        public async Task<Department> GetDepartmentByIdAsync(int id)
+        public async Task<DepartmentCreation> GetDepartmentByIdAsync(int id)
         {
             return await _departmentRepository.GetDepartmentByIdAsync(id);
         }

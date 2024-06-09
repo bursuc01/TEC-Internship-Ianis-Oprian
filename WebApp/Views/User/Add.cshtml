@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Add";
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *,AuthoringTagHelpers
+
+@model User
+
+<form method="post" asp-action="Add">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+            <label> Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div> 
+        <div class="col-md-4 mb-3">
+            <label> Password</label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+    </div>   
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+                <label> Person Id</label>
+                <input asp-for="PersonId" class="form-control" />
+                <span asp-validation-for="PersonId" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 mb-3">
+            <label> Role</label>
+            <select asp-for="IsAdmin" class="form-control">
+                <option value="false">User</option>
+                <option value="true">Admin</option>
+            </select>
+        </div>   
+    </div> 
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a style="color:white" asp-controller="User" asp-action="Back" class="btn btn-primary">Back</a>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+</form>

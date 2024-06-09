@@ -1,10 +1,7 @@
 ﻿using ApiApp.BusinessLogicLayer.PersonBLL;
-using ApiApp.DataAccessLayer.Model;
 using ApiApp.DataAccessLayer.ObjectModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ApiApp.PresentationLayer.Controllers
 {
@@ -15,7 +12,7 @@ namespace ApiApp.PresentationLayer.Controllers
     {
         IPersonService _personService;
 
-        public PersonsController(IPersonService personService) 
+        public PersonsController(IPersonService personService)
         {
             _personService = personService;
         }
@@ -33,7 +30,7 @@ namespace ApiApp.PresentationLayer.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetAsync(int Id)
+        public async Task<IActionResult> GetByIdAsync(int Id)
         {
             var foundPerson = await _personService.GetPersonByIdAsync(Id);
             if (foundPerson == null)
@@ -73,7 +70,7 @@ namespace ApiApp.PresentationLayer.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(PersonCreation person)
         {
-            if(await _personService.PutPersonAsync(person))
+            if (await _personService.PutPersonAsync(person))
             {
                 return Ok();
             }
